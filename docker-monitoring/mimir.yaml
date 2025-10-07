@@ -1,0 +1,24 @@
+server:
+  http_listen_port: 9009
+
+common:
+  path_prefix: /tmp/mimir-data
+  replication_factor: 3
+  storage:
+    backend: filesystem
+    filesystem:
+      dir: /tmp/mimir-data
+
+memberlist:
+  join_members:
+    - mimir-1
+    - mimir-2
+    - mimir-3
+
+blocks_storage:
+  backend: filesystem
+  tsdb:
+    dir: /tmp/mimir-data/tsdb
+
+ruler:
+  rule_path: /tmp/mimir-data/rules
