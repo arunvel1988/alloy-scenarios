@@ -2,23 +2,52 @@ server:
   http_listen_port: 9009
 
 common:
-  path_prefix: /tmp/mimir-data
-  replication_factor: 3
   storage:
     backend: filesystem
     filesystem:
-      dir: /tmp/mimir-data
-
-memberlist:
-  join_members:
-    - mimir-1
-    - mimir-2
-    - mimir-3
+      dir: /data
 
 blocks_storage:
   backend: filesystem
-  tsdb:
-    dir: /tmp/mimir-data/tsdb
+  filesystem:
+    dir: /data/tsdb
+
+compactor:
+  data_dir: /data/compactor
+  sharding_enabled: false
+
+distributor:
+  ring:
+    kvstore:
+      store: inmemory
+
+ingester:
+  lifecycler:
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+  wal:
+    enabled: true
+    dir: /data/wal
+
+querier:
+  query_ingesters_within: 12h
 
 ruler:
-  rule_path: /tmp/mimir-data/rules
+  rule_path: /data/rules
+  ring:
+    kvstore:
+      store: inmemory
+
+store_gateway:
+  sharding_enabled: false
+
+limits:
+  ingestion_rate: 20000
+  ingestion_burst_size: 40000
+  max_global_series_per_user: 100000
+  max_global_series_per_metric: 50000
+
+usage_stats:
+  enabled: false
