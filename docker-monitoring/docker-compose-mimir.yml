@@ -68,8 +68,7 @@ services:
       - mimir-1
       - mimir-2
       - mimir-3
-    volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
+  
     entrypoint:
       - sh
       - -euc
